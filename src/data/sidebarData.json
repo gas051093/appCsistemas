@@ -1,0 +1,275 @@
+[
+  {
+    "id": 1,
+    "title": "Dashboard",
+    "icon": "bi bi-speedometer2",
+    "path": "/",
+    "component": "Dashboard/Dashboard"
+  },
+  {
+    "id": 2,
+    "title": "Clientes",
+    "icon": "bi bi-people",
+    "submenu": [
+      {
+        "id": 21,
+        "title": "Nuevo cliente",
+        "icon": "bi bi-person-plus",
+        "path": "/clientes/nuevo",
+        "component": "Client/NewClient"
+      },
+      {
+        "id": 22,
+        "title": "Listado clientes",
+        "icon": "bi bi-list-ul",
+        "path": "/clientes/listado",
+        "component": "Client/ListClients"
+      },
+      {
+        "id": 23,
+        "title": "Cuenta corriente",
+        "icon": "bi bi-wallet2",
+        "path": "/clientes/cuenta-corriente",
+        "component": "Client/Account"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Proveedores",
+    "icon": "bi bi-truck",
+    "submenu": [
+      {
+        "id": 31,
+        "title": "Nuevo proveedor",
+        "icon": "bi bi-person-plus",
+        "path": "/proveedores/nuevo",
+        "component": "Supplier/NewSupplier"
+      },
+      {
+        "id": 32,
+        "title": "Listado proveedores",
+        "icon": "bi bi-list-ul",
+        "path": "/proveedores/listado",
+        "component": "Supplier/ListSuppliers"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Stock",
+    "icon": "bi bi-box-seam",
+    "submenu": [
+      {
+        "id": 41,
+        "title": "Productos",
+        "icon": "bi bi-box",
+        "path": "/stock/productos",
+        "component": "Stock/Products"
+      },
+      {
+        "id": 42,
+        "title": "Categorías",
+        "icon": "bi bi-tags",
+        "path": "/stock/categorias",
+        "component": "Stock/Categories"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Compras",
+    "icon": "bi bi-cart-plus",
+    "submenu": [
+      {
+        "id": 51,
+        "title": "Nueva compra",
+        "icon": "bi bi-plus-square",
+        "path": "/compras/nueva",
+        "component": "Purchases/NewPurchase"
+      },
+      {
+        "id": 52,
+        "title": "Listado compras",
+        "icon": "bi bi-list-ul",
+        "path": "/compras/listado",
+        "component": "Purchases/ListPurchases"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Ventas",
+    "icon": "bi bi-cash-stack",
+    "submenu": [
+      {
+        "id": 61,
+        "title": "Nueva venta",
+        "icon": "bi bi-plus-square",
+        "path": "/ventas/nueva",
+        "component": "Sales/NewSale"
+      },
+      {
+        "id": 62,
+        "title": "Listado ventas",
+        "icon": "bi bi-list-ul",
+        "path": "/ventas/listado",
+        "component": "Sales/ListSales"
+      },
+      {
+        "id": 63,
+        "title": "Gestión de facturas",
+        "icon": "bi bi-receipt-cutoff",
+        "submenu": [
+          {
+            "id": 631,
+            "title": "Notas de débito",
+            "icon": "bi bi-arrow-up-right-circle",
+            "path": "/ventas/facturas/notas-debito",
+            "component": "Sales/Invoices/DebitNotes"
+          },
+          {
+            "id": 632,
+            "title": "Notas de crédito",
+            "icon": "bi bi-arrow-down-left-circle",
+            "path": "/ventas/facturas/notas-credito",
+            "component": "Sales/Invoices/CreditNotes"
+          },
+          {
+            "id": 633,
+            "title": "Eliminar factura interna",
+            "icon": "bi bi-trash",
+            "path": "/ventas/facturas/eliminar-interna",
+            "component": "Sales/Invoices/DeleteInvoice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Cajas",
+    "icon": "bi bi-safe2",
+    "submenu": [
+      {
+        "id": 71,
+        "title": "Abrir caja",
+        "icon": "bi bi-door-open",
+        "path": "/cajas/abrir",
+        "component": "Cash/OpenCash"
+      },
+      {
+        "id": 72,
+        "title": "Cerrar caja",
+        "icon": "bi bi-door-closed",
+        "path": "/cajas/cerrar",
+        "component": "Cash/CloseCash"
+      },
+      {
+        "id": 73,
+        "title": "Historial de cierres",
+        "icon": "bi bi-clock-history",
+        "path": "/cajas/historial",
+        "component": "Cash/History"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Taller",
+    "icon": "bi bi-tools",
+    "submenu": [
+      {
+        "id": 81,
+        "title": "Nueva orden",
+        "icon": "bi bi-plus-square",
+        "path": "/taller/nueva-orden",
+        "component": "Workshop/NewOrder"
+      },
+      {
+        "id": 82,
+        "title": "Listado órdenes",
+        "icon": "bi bi-list-ul",
+        "path": "/taller/listado",
+        "component": "Workshop/ListOrders"
+      },
+      {
+        "id": 83,
+        "title": "Historial reparaciones",
+        "icon": "bi bi-clock-history",
+        "path": "/taller/historial",
+        "component": "Workshop/History"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Reportes",
+    "icon": "bi bi-bar-chart-line",
+    "submenu": [
+      {
+        "id": 91,
+        "title": "Ventas",
+        "icon": "bi bi-cash-stack",
+        "path": "/reportes/ventas",
+        "component": "Reports/Sales"
+      },
+      {
+        "id": 92,
+        "title": "Compras",
+        "icon": "bi bi-cart-plus",
+        "path": "/reportes/compras",
+        "component": "Reports/Purchases"
+      },
+      {
+        "id": 93,
+        "title": "Stock",
+        "icon": "bi bi-box-seam",
+        "path": "/reportes/stock",
+        "component": "Reports/Stock"
+      },
+      {
+        "id": 94,
+        "title": "Clientes",
+        "icon": "bi bi-people",
+        "path": "/reportes/clientes",
+        "component": "Reports/Clients"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Configuración",
+    "icon": "bi bi-gear",
+    "submenu": [
+      {
+        "id": 101,
+        "title": "Usuarios",
+        "icon": "bi bi-person-badge",
+        "path": "/config/usuarios",
+        "component": "Config/Users"
+      },
+      {
+        "id": 102,
+        "title": "Roles y permisos",
+        "icon": "bi bi-shield-lock",
+        "path": "/config/roles-permisos",
+        "component": "Config/RolesPermissions"
+      },
+      {
+        "id": 103,
+        "title": "Preferencias del sistema",
+        "icon": "bi bi-sliders",
+        "path": "/config/preferencias",
+        "component": "Config/SystemPreferences"
+      },
+      {
+        "id": 104,
+        "title": "Copias de seguridad",
+        "icon": "bi bi-cloud-arrow-up",
+        "path": "/config/backups",
+        "component": "Config/Backups"
+      }
+    ]
+  }
+]
