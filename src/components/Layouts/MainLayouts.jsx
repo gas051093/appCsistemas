@@ -4,9 +4,7 @@ function MainLayouts (){
     return(
         <div className="d-flex">
             <Sidebar />
-            <div>
                 <Outlet />
-            </div>
         </div>
     )
 }
