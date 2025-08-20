@@ -1,0 +1,32 @@
+.newclient{
+    overflow: auto;
+    max-height: 100dvh;
+    // background-color: rgb(230, 230, 230);
+    &__head{
+        background-color: #ffffff;
+    }
+    &__form{
+        // color: #ffffff;
+        // background-image: linear-gradient(to right, rgba(0, 0, 0, 0.678), rgb(139, 139, 139));
+        // background-image: radial-gradient(circle at center, rgb(146, 146, 146),rgb(0, 3, 38));
+        // border-radius: 10px;
+        box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.589);
+    }
+    &__btnSubmit{
+        all: unset;
+        background-color: #007AFF;
+        color: white;
+        border-radius: 5px;
+        min-width: 5em;
+        height:2em;
+        padding-inline: 5px;
+        text-align: center;
+        margin-inline: 2px;
+        &:hover{
+            background-color: #0053ab;
+        }
+        &:active{
+            background-color: #0600b0;
+        }
+    }
+}
