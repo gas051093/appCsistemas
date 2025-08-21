@@ -1,81 +1,37 @@
 import { use, useEffect, useState } from "react";
+import { useClientForm } from "../../hook/useClientForm";
 import './NewClient.scss';
 import { addClient } from "../../services/clients";
 import { filterLocalidades, filterProv } from "../../services/localidades";
 import Swal from 'sweetalert2'
 
 function NewClient() {
-  const [identIva, setIdentIva] = useState('DNI');
-  const [name, setName] = useState('');
-  const [iva, setIva] = useState("consumidorFinal");
-  const [ident, setIdent] = useState();
-  const [city, setCity] = useState('Buenos Aires');
-  const [dep, setDep] = useState();
-  const [street, setStreet] = useState();
-  const [nhome, setNhom] = useState('0');
-  const [ndepto, setNdepto] = useState('0');
-  const [cel, setCel] = useState();
-  const [email, setEmail] = useState();
+  const { values, error, handleChange, validate, resetForm } = useClientForm({
+    name: '',
+    cIva: '',
+    ident: '',
+    provincia: '',
+    street: '',
+    home: '',
+    depto: '',
+    tel: '',
+    email: ''
+  });
   const [loc, setLoc] = useState([]);
   const [prov, setProv] = useState([])
-
+  const [identIva, setIdentIva] = useState()
+  const [iva, setIva] = useState(false)
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    if (!form.checkValidity()) {
-      e.stopPropagation();
-      form.classList.add("was-validated")
-      return;
+    e.preventDefault()
+    console.log("datos validos", values);
+    if (validate()) {
+      console.log("datos validos 2", values);
+      // resetForm
+    } else { 
+      const form = e.target
+      form.classList.add('was-validated')
     }
-    Swal.fire({
-      title: 'Agregando cliente',
-      text: 'por favor aguarde',
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
-    })
-    try {
-      const newClient = {
-        id: "",
-        name: name,
-        ident: ident,
-        iva: iva,
-        city: city,
-        locate: dep,
-        street: street,
-        nhome: nhome,
-        dhome: ndepto,
-        cel: cel,
-        email: email,
-      }
-      const response = await addClient(newClient);
-      if (response) {
-        Swal.fire({
-          icon: "success",
-          title: "cliente agregado con exito",
-          text: `Cliente nuevo: ${response.name} ID: ${response.id}`,
-          didOpen: () => Swal.hideLoading(),
-          didClose: () => {
-            resetForm(form);
-          }
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error al crear el cliente",
-          text: `intente de nuevo mas tarde`,
-          didOpen: () => Swal.hideLoading()
-        });
-      }
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error al crear el cliente",
-        text: err.message,
-        didOpen: () => Swal.hideLoading()
-
-      });
-    }
-  };
+  }
   const imputIdent = (e) => {
     switch (e) {
       case "consumidorFinal":
@@ -93,67 +49,51 @@ function NewClient() {
     }
   };
 
-  const resetForm = (form) => {
-    setName('')
-    setCel('')
-    setStreet('')
-    setCity('Buenos Aires')
-    setEmail('')
-    setIdent('')
-    setIva('consumidorFinal')
-    setNdepto('0')
-    setNhom('0')
-    form.classList.remove("was-validated")
-  }
-
   useEffect(() => {
     setProv(filterProv())
-    setLoc(filterLocalidades(city))
-  }, [city])
+  }, [])
 
   return (
     <section className="container-fluid newclient p-0">
-      <article className="newclient__head px-3 pt-2">
-        <h2 className="p-0 m-0">
-          <i className="bi bi-person-plus me-2"></i>Nuevo Cliente
-        </h2>
-        <p>Formulario de alta de clientes</p>
-      </article>
       <article className="p-3 mx-3 mb-3 newclient__form">
-        <form className="row row-gap-2 align-items-start needs-validation" id="form" noValidate onSubmit={handleSubmit}>
+        <form
+          className="row row-gap-2 align-items-start needs-validation"
+          id="form"
+          noValidate
+          onSubmit={handleSubmit}
+        >
           <div className="col-7">
-            <label htmlFor="nombre">Nombre</label>
+            <label htmlFor="name">Nombre</label>
             <input
               type="text"
               className="form-control"
-              id="nombre"
+              id="name"
               placeholder="Nombre"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
               required
+              onChange={handleChange}
             />
-            <div className="invalid-feedback">
-              Ingrese el nombre del cliente
-            </div>
+            <div className="invalid-feedback">{error.name}</div>
           </div>
           <div className="col-5">
-            <label htmlFor="floatingSelect">Condicion de IVA</label>
+            <label htmlFor="cIva">Condicion de IVA</label>
             <select
               className="form-select"
-              id="floatingSelect"
+              id="cIva"
               aria-label="Floating label select example"
-              value={iva}
               required
               onChange={(e) => {
-                imputIdent(e.target.value)
-                setIva(e.target.value)
+                handleChange(e);
+                imputIdent(e.target.value);
+                setIva(true);
               }}
             >
+              <option disabled selected value=""></option>
               <option value="consumidorFinal">Consumidor final</option>
               <option value="monotributo">Monotributo</option>
               <option value="exento">Exento</option>
               <option value="inscripto">Responsable Inscripto</option>
             </select>
+            <div className="invalid-feedback">{error.cIva}</div>
           </div>
           <div className="col-3">
             <label htmlFor="ident">Identificador</label>
@@ -161,40 +101,46 @@ function NewClient() {
               type="text"
               className="form-control"
               id="ident"
-              value={ident}
-              placeholder={identIva}
+              onChange={handleChange}
               pattern={identIva === "DNI" ? "[0-9]{7,8}" : "[0-9]{11}"}
-              onChange={(e) => setIdent(e.target.value)}
+              placeholder={identIva}
               required
+              disabled={!iva}
             />
-            <div className="invalid-feedback">
-              No es un {identIva} valido
-            </div>
+            <div className="invalid-feedback">{error.ident}</div>
           </div>
           <hr className="" />
           <p className="p-0 m-0">Domicilio</p>
           <div className="col-3">
-            <label htmlFor="floatingSelect">Provincia</label>
+            <label htmlFor="provincia">Provincia</label>
             <select
               className="form-select"
-              id="floatingSelect"
+              id="provincia"
               aria-label="Floating label select example"
               required
-              onChange={(e)=>setCity(e.target.value)}
+              onChange={handleChange}
             >
-              {prov.map((l) => (<option key={l.index} value={l}>{l}</option>))}
+              {prov.map((l) => (
+                <option key={l.index} value={l}>
+                  {l}
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-3">
-            <label htmlFor="floatingSelect">Localidad</label>
+            <label htmlFor="localidad">Localidad</label>
             <select
               className="form-select"
-              id="floatingSelect"
+              id="localidad"
               aria-label="Floating label select example"
               required
-              onChange={(e)=>setDep(e.target.value)}
+              onChange={handleChange}
             >
-              {loc.map((l) => (<option key={l.index} value={l}>{l}</option>))}
+              {loc.map((l) => (
+                <option key={l.index} value={l}>
+                  {l}
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-4">
@@ -203,11 +149,11 @@ function NewClient() {
               type="text"
               className="form-control"
               id="street"
-              value={street}
               placeholder="Calle"
-              onChange={(e) => setStreet(e.target.value)}
               required
+              onChange={handleChange}
             />
+            <div className="invalid-feedback">{error.street}</div>
           </div>
           <div className="col-2">
             <label htmlFor="home">Casa N°</label>
@@ -215,24 +161,20 @@ function NewClient() {
               type="number"
               className="form-control"
               id="home"
-              min='0'
-              value={nhome}
-              placeholder="home"
-              onChange={(e) => setNhom(e.target.value)}
-              required
+              min="0"
+              placeholder="0"
+              onChange={handleChange}
             />
           </div>
           <div className="col-2">
-            <label htmlFor="dep">Depto</label>
+            <label htmlFor="depto">Depto</label>
             <input
               type="number"
-              min='0'
+              min="0"
               className="form-control"
-              id="dep"
-              value={ndepto}
-              placeholder="dep"
-              onChange={(e) => setNdepto(e.target.value)}
-              required
+              id="depto"
+              placeholder="0"
+              onChange={handleChange}
             />
           </div>
           <hr />
@@ -240,39 +182,43 @@ function NewClient() {
           <div className="col-3">
             <label htmlFor="tel">Celular</label>
             <input
-              type="tel"
-              value={cel}
+              type="text"
               className="form-control"
               id="tel"
               placeholder="1112345678"
-              pattern="[0-9]{2,4}\s+[0-9]{3,4}[-\s]?[0-9]{4}" 
-              onChange={(e) => setCel(e.target.value)}
+              inputMgiode='numeric'
+              autoComplete="tel"
               required
+              pattern="[0-9]{8,12}"
+              onChange={handleChange}
             />
-            <div className="invalid-feedback">
-              El numero ingresado no es valido
-            </div>
+            <div className="invalid-feedback">{error.tel}</div>
           </div>
           <div className="col-4">
             <label htmlFor="email">Email</label>
             <input
               type="email"
-              value={email}
               className="form-control"
               id="email"
               placeholder="usuario@dominio.com"
-              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-              onChange={(e) => setEmail(e.target.value)}
               required
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+              onChange={handleChange}
             />
-            <div className="invalid-feedback">
-              El correo ingresado no coincide con el formado admitido
-            </div>
+            <div className="invalid-feedback">{error.email}</div>
           </div>
           <hr />
           <div className="mt-3 text-end">
-            <button className="newclient__btnSubmit" type="button" onClick={(e)=>resetForm(e.target.closest("form"))}>Cancelar</button>
-            <button className="newclient__btnSubmit" type="Submit">Nuevo</button>
+            <button
+              className="newclient__btnSubmit"
+              type="button"
+              onClick={(e) => resetForm(e.target.closest("form"))}
+            >
+              Cancelar
+            </button>
+            <button className="newclient__btnSubmit" type="Submit">
+              Nuevo
+            </button>
           </div>
         </form>
       </article>
