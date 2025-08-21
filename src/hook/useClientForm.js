@@ -15,9 +15,10 @@ export function useClientForm (initialValues){
         setError(errs);
         return Object.keys(errs).length === 0;
     }
-    const resetForm = () => {
+    const resetForm = (form) => {
       setValues(initialValues);
       setError({});
+      form.classList.remove('was-validated')
     };
 
     return { values, error, handleChange, validate, resetForm };

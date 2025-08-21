@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useClientForm } from "../../hook/useClientForm";
 import './NewClient.scss';
 import { addClient } from "../../services/clients";
@@ -11,6 +11,7 @@ function NewClient() {
     cIva: '',
     ident: '',
     provincia: '',
+    localidad: '',
     street: '',
     home: '',
     depto: '',
@@ -21,9 +22,10 @@ function NewClient() {
   const [prov, setProv] = useState([])
   const [identIva, setIdentIva] = useState()
   const [iva, setIva] = useState(false)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("datos validos", values);
+    console.log("datos validos3", values);
     if (validate()) {
       console.log("datos validos 2", values);
       // resetForm
@@ -52,6 +54,9 @@ function NewClient() {
   useEffect(() => {
     setProv(filterProv())
   }, [])
+  useEffect(()=>{
+    setLoc(filterLocalidades(values.provincia))
+  },[values.provincia])
 
   return (
     <section className="container-fluid newclient p-0">
@@ -69,6 +74,7 @@ function NewClient() {
               className="form-control"
               id="name"
               placeholder="Nombre"
+              value={values.name}
               required
               onChange={handleChange}
             />
@@ -81,13 +87,14 @@ function NewClient() {
               id="cIva"
               aria-label="Floating label select example"
               required
+              value={values.cIva}
               onChange={(e) => {
                 handleChange(e);
                 imputIdent(e.target.value);
                 setIva(true);
               }}
             >
-              <option disabled selected value=""></option>
+              <option disabled value="">Seleccione una opcion</option>
               <option value="consumidorFinal">Consumidor final</option>
               <option value="monotributo">Monotributo</option>
               <option value="exento">Exento</option>
@@ -102,10 +109,11 @@ function NewClient() {
               className="form-control"
               id="ident"
               onChange={handleChange}
+              value={values.ident}
               pattern={identIva === "DNI" ? "[0-9]{7,8}" : "[0-9]{11}"}
-              placeholder={identIva}
+              placeholder={identIva ? identIva : 'Seleccione IVA' }
               required
-              disabled={!iva}
+              disabled={values.cIva === ''}
             />
             <div className="invalid-feedback">{error.ident}</div>
           </div>
@@ -118,8 +126,10 @@ function NewClient() {
               id="provincia"
               aria-label="Floating label select example"
               required
-              onChange={handleChange}
+              value={values.provincia}
+              onChange={(e)=>{handleChange(e)}}
             >
+              <option disabled value={''}>Seleccione una provincia</option>
               {prov.map((l) => (
                 <option key={l.index} value={l}>
                   {l}
@@ -135,7 +145,10 @@ function NewClient() {
               aria-label="Floating label select example"
               required
               onChange={handleChange}
+              disabled={!values.provincia}
+              value={values.localidad}
             >
+              {values.provincia === '' ? <option disabled value={''}>Seleccione una Provincia</option> : <option disabled value={''}>Seleccione una Localidad</option>  }
               {loc.map((l) => (
                 <option key={l.index} value={l}>
                   {l}
@@ -150,6 +163,7 @@ function NewClient() {
               className="form-control"
               id="street"
               placeholder="Calle"
+              value={values.street}
               required
               onChange={handleChange}
             />
@@ -161,6 +175,7 @@ function NewClient() {
               type="number"
               className="form-control"
               id="home"
+              value={values.home}
               min="0"
               placeholder="0"
               onChange={handleChange}
@@ -170,6 +185,7 @@ function NewClient() {
             <label htmlFor="depto">Depto</label>
             <input
               type="number"
+              value={values.depto}
               min="0"
               className="form-control"
               id="depto"
@@ -183,10 +199,11 @@ function NewClient() {
             <label htmlFor="tel">Celular</label>
             <input
               type="text"
+              value={values.tel}
               className="form-control"
               id="tel"
               placeholder="1112345678"
-              inputMgiode='numeric'
+              inputMode='numeric'
               autoComplete="tel"
               required
               pattern="[0-9]{8,12}"
@@ -200,6 +217,7 @@ function NewClient() {
               type="email"
               className="form-control"
               id="email"
+              value={values.email}
               placeholder="usuario@dominio.com"
               required
               pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
