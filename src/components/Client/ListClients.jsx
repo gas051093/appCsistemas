@@ -1,6 +1,10 @@
-function ListClients (){
-    return(
-        <p>Lista de clientes A</p>
+
+
+Header
+function ListClients() {
+    return (
+        <div>
+        </div>
     )
 }
 export default ListClients;

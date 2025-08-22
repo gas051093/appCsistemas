@@ -46,7 +46,7 @@ function NewClient() {
         setIdentIva("CUIT");
         break;
       default:
-        setIdentIva("DNI"); // fallback por si llega algo inesperado
+        setIdentIva("DNI"); 
         break;
     }
   };
